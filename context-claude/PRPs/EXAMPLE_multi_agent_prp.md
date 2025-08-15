@@ -1,395 +1,206 @@
-name: "Multi-Agent System: Research Agent with Email Draft Sub-Agent"
-description: |
+nombre: "Plantilla Base PRP v2 - Rica en Contexto con Bucles de Validación"
+descripción: |
 
-## Purpose
-Build a Pydantic AI multi-agent system where a primary Research Agent uses Brave Search API and has an Email Draft Agent (using Gmail API) as a tool. This demonstrates agent-as-tool pattern with external API integrations.
+## Propósito
+Plantilla optimizada para que los agentes de IA implementen funcionalidades con suficiente contexto y capacidades de autovalidación para lograr un código funcional a través de refinamiento iterativo.
 
-## Core Principles
-1. **Context is King**: Include ALL necessary documentation, examples, and caveats
-2. **Validation Loops**: Provide executable tests/lints the AI can run and fix
-3. **Information Dense**: Use keywords and patterns from the codebase
-4. **Progressive Success**: Start simple, validate, then enhance
+## Principios Fundamentales
+1.  **El Contexto es Clave**: Incluir TODA la documentación, ejemplos y advertencias necesarias.
+2.  **Bucles de Validación**: Proporcionar pruebas/análisis estáticos (lints) ejecutables que la IA pueda correr y corregir.
+3.  **Denso en Información**: Usar palabras clave y patrones de la base de código.
+4.  **Éxito Progresivo**: Empezar de forma simple, validar y luego mejorar.
+5.  **Reglas Globales**: Asegúrese de seguir todas las reglas en CLAUDE.md.
 
 ---
 
-## Goal
-Create a production-ready multi-agent system where users can research topics via CLI, and the Research Agent can delegate email drafting tasks to an Email Draft Agent. The system should support multiple LLM providers and handle API authentication securely.
+## Objetivo
+[Qué se necesita construir - sea específico sobre el estado final y los objetivos deseados]
 
-## Why
-- **Business value**: Automates research and email drafting workflows
-- **Integration**: Demonstrates advanced Pydantic AI multi-agent patterns
-- **Problems solved**: Reduces manual work for research-based email communications
+## Por qué
+- [Valor para el negocio e impacto en el usuario]
+- [Integración con funcionalidades existentes]
+- [Problemas que esto resuelve y para quién]
 
-## What
-A CLI-based application where:
-- Users input research queries
-- Research Agent searches using Brave API
-- Research Agent can invoke Email Draft Agent to create Gmail drafts
-- Results stream back to the user in real-time
+## Qué
+[Comportamiento visible para el usuario y requisitos técnicos]
 
-### Success Criteria
-- [ ] Research Agent successfully searches via Brave API
-- [ ] Email Agent creates Gmail drafts with proper authentication
-- [ ] Research Agent can invoke Email Agent as a tool
-- [ ] CLI provides streaming responses with tool visibility
-- [ ] All tests pass and code meets quality standards
+### Criterios de Éxito
+- [ ] [Resultados específicos y medibles]
 
-## All Needed Context
+## Todo el Contexto Necesario
 
-### Documentation & References
+### Documentación y Referencias (liste todo el contexto necesario para implementar la funcionalidad)
 ```yaml
-# MUST READ - Include these in your context window
-- url: https://ai.pydantic.dev/agents/
-  why: Core agent creation patterns
-  
-- url: https://ai.pydantic.dev/multi-agent-applications/
-  why: Multi-agent system patterns, especially agent-as-tool
-  
-- url: https://developers.google.com/gmail/api/guides/sending
-  why: Gmail API authentication and draft creation
-  
-- url: https://api-dashboard.search.brave.com/app/documentation
-  why: Brave Search API REST endpoints
-  
-- file: examples/agent/agent.py
-  why: Pattern for agent creation, tool registration, dependencies
-  
-- file: examples/agent/providers.py
-  why: Multi-provider LLM configuration pattern
-  
-- file: examples/cli.py
-  why: CLI structure with streaming responses and tool visibility
+# LECTURA OBLIGATORIA - Incluya esto en su ventana de contexto
+- url: [https://api.www.documentcloud.org/api](https://api.www.documentcloud.org/api)
+  por_que: [Secciones/métodos específicos que necesitará]
 
-- url: https://github.com/googleworkspace/python-samples/blob/main/gmail/snippet/send%20mail/create_draft.py
-  why: Official Gmail draft creation example
+- file: [ruta/a/ejemplo.py]
+  por_que: [Patrón a seguir, problemas a evitar]
+
+- doc: [https://www.sigmaaldrich.com/docs](https://www.sigmaaldrich.com/docs)
+  seccion: [Sección específica sobre errores comunes]
+  critico: [Idea clave que previene errores comunes]
+
+- docfile: [PRPs/ai_docs/archivo.md]
+  por_que: [documentos que el usuario ha pegado en el proyecto]
 ```
 
-### Current Codebase tree
+### Árbol actual de la base de código (ejecute `tree` en la raíz del proyecto) para obtener una visión general
 ```bash
-.
-├── examples/
-│   ├── agent/
-│   │   ├── agent.py
-│   │   ├── providers.py
-│   │   └── ...
-│   └── cli.py
-├── PRPs/
-│   └── templates/
-│       └── prp_base.md
-├── INITIAL.md
-├── CLAUDE.md
-└── requirements.txt
+
 ```
 
-### Desired Codebase tree with files to be added
+### Árbol deseado de la base de código con los archivos a añadir y la responsabilidad de cada uno
 ```bash
-.
-├── agents/
-│   ├── __init__.py               # Package init
-│   ├── research_agent.py         # Primary agent with Brave Search
-│   ├── email_agent.py           # Sub-agent with Gmail capabilities
-│   ├── providers.py             # LLM provider configuration
-│   └── models.py                # Pydantic models for data validation
-├── tools/
-│   ├── __init__.py              # Package init
-│   ├── brave_search.py          # Brave Search API integration
-│   └── gmail_tool.py            # Gmail API integration
-├── config/
-│   ├── __init__.py              # Package init
-│   └── settings.py              # Environment and config management
-├── tests/
-│   ├── __init__.py              # Package init
-│   ├── test_research_agent.py   # Research agent tests
-│   ├── test_email_agent.py      # Email agent tests
-│   ├── test_brave_search.py     # Brave search tool tests
-│   ├── test_gmail_tool.py       # Gmail tool tests
-│   └── test_cli.py              # CLI tests
-├── cli.py                       # CLI interface
-├── .env.example                 # Environment variables template
-├── requirements.txt             # Updated dependencies
-├── README.md                    # Comprehensive documentation
-└── credentials/.gitkeep         # Directory for Gmail credentials
+
 ```
 
-### Known Gotchas & Library Quirks
+### Problemas Conocidos de nuestra base de código y Particularidades de las Librerías
 ```python
-# CRITICAL: Pydantic AI requires async throughout - no sync functions in async context
-# CRITICAL: Gmail API requires OAuth2 flow on first run - credentials.json needed
-# CRITICAL: Brave API has rate limits - 2000 req/month on free tier
-# CRITICAL: Agent-as-tool pattern requires passing ctx.usage for token tracking
-# CRITICAL: Gmail drafts need base64 encoding with proper MIME formatting
-# CRITICAL: Always use absolute imports for cleaner code
-# CRITICAL: Store sensitive credentials in .env, never commit them
+# CRÍTICO: La librería [nombre] requiere [configuración específica]
+# Ejemplo: FastAPI requiere funciones asíncronas para los endpoints
+# Ejemplo: Este ORM no soporta inserciones por lotes de más de 1000 registros
+# Ejemplo: Usamos pydantic v2 y
 ```
 
-## Implementation Blueprint
+## Plan de Implementación
 
-### Data models and structure
+### Modelos y estructura de datos
 
+Crear los modelos de datos principales; aseguramos la seguridad de tipos (type safety) y la consistencia.
 ```python
-# models.py - Core data structures
-from pydantic import BaseModel, Field
-from typing import List, Optional
-from datetime import datetime
-
-class ResearchQuery(BaseModel):
-    query: str = Field(..., description="Research topic to investigate")
-    max_results: int = Field(10, ge=1, le=50)
-    include_summary: bool = Field(True)
-
-class BraveSearchResult(BaseModel):
-    title: str
-    url: str
-    description: str
-    score: float = Field(0.0, ge=0.0, le=1.0)
-
-class EmailDraft(BaseModel):
-    to: List[str] = Field(..., min_items=1)
-    subject: str = Field(..., min_length=1)
-    body: str = Field(..., min_length=1)
-    cc: Optional[List[str]] = None
-    bcc: Optional[List[str]] = None
-
-class ResearchEmailRequest(BaseModel):
-    research_query: str
-    email_context: str = Field(..., description="Context for email generation")
-    recipient_email: str
+Ejemplos:
+ - modelos ORM
+ - modelos pydantic
+ - esquemas pydantic
+ - validadores pydantic
 ```
 
-### List of tasks to be completed
+### Lista de tareas a completar para cumplir el PRP en el orden en que deben realizarse
 
 ```yaml
-Task 1: Setup Configuration and Environment
-CREATE config/settings.py:
-  - PATTERN: Use pydantic-settings like examples use os.getenv
-  - Load environment variables with defaults
-  - Validate required API keys present
+Tarea 1:
+MODIFICAR src/modulo_existente.py:
+  - BUSCAR patrón: "class ImplementacionAntigua"
+  - INYECTAR después de la línea que contiene "def __init__"
+  - CONSERVAR las firmas de los métodos existentes
 
-CREATE .env.example:
-  - Include all required environment variables with descriptions
-  - Follow pattern from examples/README.md
+CREAR src/nueva_funcionalidad.py:
+  - REPLICAR patrón de: src/funcionalidad_similar.py
+  - MODIFICAR el nombre de la clase y la lógica principal
+  - MANTENER idéntico el patrón de manejo de errores
 
-Task 2: Implement Brave Search Tool
-CREATE tools/brave_search.py:
-  - PATTERN: Async functions like examples/agent/tools.py
-  - Simple REST client using httpx (already in requirements)
-  - Handle rate limits and errors gracefully
-  - Return structured BraveSearchResult models
+...(...)
 
-Task 3: Implement Gmail Tool
-CREATE tools/gmail_tool.py:
-  - PATTERN: Follow OAuth2 flow from Gmail quickstart
-  - Store token.json in credentials/ directory
-  - Create draft with proper MIME encoding
-  - Handle authentication refresh automatically
-
-Task 4: Create Email Draft Agent
-CREATE agents/email_agent.py:
-  - PATTERN: Follow examples/agent/agent.py structure
-  - Use Agent with deps_type pattern
-  - Register gmail_tool as @agent.tool
-  - Return EmailDraft model
-
-Task 5: Create Research Agent
-CREATE agents/research_agent.py:
-  - PATTERN: Multi-agent pattern from Pydantic AI docs
-  - Register brave_search as tool
-  - Register email_agent.run() as tool
-  - Use RunContext for dependency injection
-
-Task 6: Implement CLI Interface
-CREATE cli.py:
-  - PATTERN: Follow examples/cli.py streaming pattern
-  - Color-coded output with tool visibility
-  - Handle async properly with asyncio.run()
-  - Session management for conversation context
-
-Task 7: Add Comprehensive Tests
-CREATE tests/:
-  - PATTERN: Mirror examples test structure
-  - Mock external API calls
-  - Test happy path, edge cases, errors
-  - Ensure 80%+ coverage
-
-Task 8: Create Documentation
-CREATE README.md:
-  - PATTERN: Follow examples/README.md structure
-  - Include setup, installation, usage
-  - API key configuration steps
-  - Architecture diagram
+Tarea N:
+...
 ```
 
-### Per task pseudocode
-
+### Pseudocódigo por tarea según sea necesario añadido a cada tarea
 ```python
-# Task 2: Brave Search Tool
-async def search_brave(query: str, api_key: str, count: int = 10) -> List[BraveSearchResult]:
-    # PATTERN: Use httpx like examples use aiohttp
-    async with httpx.AsyncClient() as client:
-        headers = {"X-Subscription-Token": api_key}
-        params = {"q": query, "count": count}
-        
-        # GOTCHA: Brave API returns 401 if API key invalid
-        response = await client.get(
-            "https://api.search.brave.com/res/v1/web/search",
-            headers=headers,
-            params=params,
-            timeout=30.0  # CRITICAL: Set timeout to avoid hanging
-        )
-        
-        # PATTERN: Structured error handling
-        if response.status_code != 200:
-            raise BraveAPIError(f"API returned {response.status_code}")
-        
-        # Parse and validate with Pydantic
-        data = response.json()
-        return [BraveSearchResult(**result) for result in data.get("web", {}).get("results", [])]
 
-# Task 5: Research Agent with Email Agent as Tool
-@research_agent.tool
-async def create_email_draft(
-    ctx: RunContext[AgentDependencies],
-    recipient: str,
-    subject: str,
-    context: str
-) -> str:
-    """Create email draft based on research context."""
-    # CRITICAL: Pass usage for token tracking
-    result = await email_agent.run(
-        f"Create an email to {recipient} about: {context}",
-        deps=EmailAgentDeps(subject=subject),
-        usage=ctx.usage  # PATTERN from multi-agent docs
-    )
-    
-    return f"Draft created with ID: {result.data}"
+# Tarea 1
+# Pseudocódigo con detalles CRÍTICOS, no escribir el código completo
+async def nueva_funcionalidad(param: str) -> Result:
+    # PATRÓN: Siempre valide la entrada primero (ver src/validators.py)
+    validated = validate_input(param)  # lanza ValidationError
+
+    # OJO: Esta librería requiere un pool de conexiones (connection pooling)
+    async with get_connection() as conn:  # ver src/db/pool.py
+        # PATRÓN: Use el decorador de reintentos existente
+        @retry(attempts=3, backoff=exponential)
+        async def _inner():
+            # CRÍTICO: La API devuelve 429 si hay >10 req/seg
+            await rate_limiter.acquire()
+            return await external_api.call(validated)
+
+        result = await _inner()
+
+    # PATRÓN: Formato de respuesta estandarizado
+    return format_response(result)  # ver src/utils/responses.py
 ```
 
-### Integration Points
+### Puntos de Integración
 ```yaml
-ENVIRONMENT:
-  - add to: .env
-  - vars: |
-      # LLM Configuration
-      LLM_PROVIDER=openai
-      LLM_API_KEY=sk-...
-      LLM_MODEL=gpt-4
-      
-      # Brave Search
-      BRAVE_API_KEY=BSA...
-      
-      # Gmail (path to credentials.json)
-      GMAIL_CREDENTIALS_PATH=./credentials/credentials.json
-      
+BASE_DE_DATOS:
+  - migracion: "Añadir columna 'feature_enabled' a la tabla de usuarios"
+  - indice: "CREATE INDEX idx_feature_lookup ON users(feature_id)"
+
 CONFIG:
-  - Gmail OAuth: First run opens browser for authorization
-  - Token storage: ./credentials/token.json (auto-created)
-  
-DEPENDENCIES:
-  - Update requirements.txt with:
-    - google-api-python-client
-    - google-auth-httplib2
-    - google-auth-oauthlib
+  - añadir a: config/settings.py
+  - patron: "FEATURE_TIMEOUT = int(os.getenv('FEATURE_TIMEOUT', '30'))"
+
+RUTAS:
+  - añadir a: src/api/routes.py
+  - patron: "router.include_router(feature_router, prefix='/feature')"
 ```
 
-## Validation Loop
+## Bucle de Validación
 
-### Level 1: Syntax & Style
+### Nivel 1: Sintaxis y Estilo
 ```bash
-# Run these FIRST - fix any errors before proceeding
-ruff check . --fix              # Auto-fix style issues
-mypy .                          # Type checking
+# Ejecute esto PRIMERO - corrija cualquier error antes de proceder
+ruff check src/nueva_funcionalidad.py --fix  # Corregir automáticamente lo que sea posible
+mypy src/nueva_funcionalidad.py             # Verificación de tipos
 
-# Expected: No errors. If errors, READ and fix.
+# Esperado: Sin errores. Si hay errores, LEA el error y corríjalo.
 ```
 
-### Level 2: Unit Tests
+### Nivel 2: Pruebas Unitarias para cada nueva funcionalidad/archivo/función usando los patrones existentes
 ```python
-# test_research_agent.py
-async def test_research_with_brave():
-    """Test research agent searches correctly"""
-    agent = create_research_agent()
-    result = await agent.run("AI safety research")
-    assert result.data
-    assert len(result.data) > 0
+# CREAR test_nueva_funcionalidad.py con estos casos de prueba:
+def test_camino_feliz():
+    """La funcionalidad básica funciona"""
+    result = nueva_funcionalidad("entrada_valida")
+    assert result.status == "success"
 
-async def test_research_creates_email():
-    """Test research agent can invoke email agent"""
-    agent = create_research_agent()
-    result = await agent.run(
-        "Research AI safety and draft email to john@example.com"
-    )
-    assert "draft_id" in result.data
+def test_error_de_validacion():
+    """Una entrada inválida lanza ValidationError"""
+    with pytest.raises(ValidationError):
+        nueva_funcionalidad("")
 
-# test_email_agent.py  
-def test_gmail_authentication(monkeypatch):
-    """Test Gmail OAuth flow handling"""
-    monkeypatch.setenv("GMAIL_CREDENTIALS_PATH", "test_creds.json")
-    tool = GmailTool()
-    assert tool.service is not None
-
-async def test_create_draft():
-    """Test draft creation with proper encoding"""
-    agent = create_email_agent()
-    result = await agent.run(
-        "Create email to test@example.com about AI research"
-    )
-    assert result.data.get("draft_id")
-```
-
+def test_timeout_api_externa():
+    """Maneja los tiempos de espera (timeouts) correctamente"""
+    with mock.patch('external_api.call', side_effect=TimeoutError):
+        result = nueva_funcionalidad("valido")
+        assert result.status == "error"
+        assert "timeout" in result.message
 ```bash
-# Run tests iteratively until passing:
-pytest tests/ -v --cov=agents --cov=tools --cov-report=term-missing
-
-# If failing: Debug specific test, fix code, re-run
+# Ejecutar e iterar hasta que pasen:
+uv run pytest test_nueva_funcionalidad.py -v
+# Si falla: Lea el error, entienda la causa raíz, corrija el código y vuelva a ejecutar (nunca haga un mock para que la prueba pase).
 ```
 
-### Level 3: Integration Test
+### Nivel 3: Pruebas de Integración
 ```bash
-# Test CLI interaction
-python cli.py
+# Iniciar el servicio
+uv run python -m src.main --dev
 
-# Expected interaction:
-# You: Research latest AI safety developments
-# 🤖 Assistant: [Streams research results]
-# 🛠 Tools Used:
-#   1. brave_search (query='AI safety developments', limit=10)
-#
-# You: Create an email draft about this to john@example.com  
-# 🤖 Assistant: [Creates draft]
-# 🛠 Tools Used:
-#   1. create_email_draft (recipient='john@example.com', ...)
+# Probar el endpoint
+curl -X POST http://localhost:8000/feature \
+  -H "Content-Type: application/json" \
+  -d '{"param": "valor_de_prueba"}'
 
-# Check Gmail drafts folder for created draft
+# Esperado: {"status": "success", "data": {...}}
+# Si hay error: Revise los logs en logs/app.log para ver el stack trace.
 ```
 
-## Final Validation Checklist
-- [ ] All tests pass: `pytest tests/ -v`
-- [ ] No linting errors: `ruff check .`
-- [ ] No type errors: `mypy .`
-- [ ] Gmail OAuth flow works (browser opens, token saved)
-- [ ] Brave Search returns results
-- [ ] Research Agent invokes Email Agent successfully
-- [ ] CLI streams responses with tool visibility
-- [ ] Error cases handled gracefully
-- [ ] README includes clear setup instructions
-- [ ] .env.example has all required variables
+## Lista de Verificación Final
+- [ ] Todas las pruebas pasan: `uv run pytest tests/ -v`
+- [ ] Sin errores de linting: `uv run ruff check src/`
+- [ ] Sin errores de tipo: `uv run mypy src/`
+- [ ] Prueba manual exitosa: [curl/comando específico]
+- [ ] Casos de error manejados correctamente
+- [ ] Los logs son informativos pero no verbosos
+- [ ] Documentación actualizada si es necesario
 
 ---
 
-## Anti-Patterns to Avoid
-- ❌ Don't hardcode API keys - use environment variables
-- ❌ Don't use sync functions in async agent context
-- ❌ Don't skip OAuth flow setup for Gmail
-- ❌ Don't ignore rate limits for APIs
-- ❌ Don't forget to pass ctx.usage in multi-agent calls
-- ❌ Don't commit credentials.json or token.json files
-
-## Confidence Score: 9/10
-
-High confidence due to:
-- Clear examples to follow from the codebase
-- Well-documented external APIs
-- Established patterns for multi-agent systems
-- Comprehensive validation gates
-
-Minor uncertainty on Gmail OAuth first-time setup UX, but documentation provides clear guidance.
+## Antipatrones a Evitar
+- ❌ No cree nuevos patrones cuando los existentes funcionan.
+- ❌ No omita la validación porque "debería funcionar".
+- ❌ No ignore las pruebas que fallan; corríjalas.
+- ❌ No use funciones síncronas en un contexto asíncrono.
+- ❌ No inserte valores fijos en el código que deberían estar en la configuración.
+- ❌ No capture todas las excepciones; sea específico.
