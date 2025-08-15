@@ -1,193 +1,212 @@
-nombre: "Plantilla Base PRP v2 - Rica en Contexto con Bucles de Validación"
-descripción: |
+name: "Base PRP Template v2 - Context-Rich with Validation Loops"
+description: |
 
-Propósito
-Plantilla optimizada para que los agentes de IA implementen funcionalidades con suficiente contexto y capacidades de autovalidación para lograr un código funcional a través de refinamiento iterativo.
+## Purpose
+Template optimized for AI agents to implement features with sufficient context and self-validation capabilities to achieve working code through iterative refinement.
 
-Principios Fundamentales
-El Contexto es Clave: Incluir TODA la documentación, ejemplos y advertencias necesarias.
+## Core Principles
+1. **Context is King**: Include ALL necessary documentation, examples, and caveats
+2. **Validation Loops**: Provide executable tests/lints the AI can run and fix
+3. **Information Dense**: Use keywords and patterns from the codebase
+4. **Progressive Success**: Start simple, validate, then enhance
+5. **Global rules**: Be sure to follow all rules in CLAUDE.md
 
-Bucles de Validación: Proporcionar pruebas/análisis estáticos (lints) ejecutables que la IA pueda correr y corregir.
+---
 
-Denso en Información: Usar palabras clave y patrones de la base de código.
+## Goal
+[What needs to be built - be specific about the end state and desires]
 
-Éxito Progresivo: Empezar de forma simple, validar y luego mejorar.
+## Why
+- [Business value and user impact]
+- [Integration with existing features]
+- [Problems this solves and for whom]
 
-Reglas Globales: Asegúrese de seguir todas las reglas en CLAUDE.md.
+## What
+[User-visible behavior and technical requirements]
 
-Objetivo
-[Qué se necesita construir - sea específico sobre el estado final y los objetivos deseados]
+### Success Criteria
+- [ ] [Specific measurable outcomes]
 
-Por qué
-[Valor para el negocio e impacto en el usuario]
+## All Needed Context
 
-[Integración con funcionalidades existentes]
+### Documentation & References (list all context needed to implement the feature)
+```yaml
+# MUST READ - Include these in your context window
+- url: [Official API docs URL]
+  why: [Specific sections/methods you'll need]
+  
+- file: [path/to/example.py]
+  why: [Pattern to follow, gotchas to avoid]
+  
+- doc: [Library documentation URL] 
+  section: [Specific section about common pitfalls]
+  critical: [Key insight that prevents common errors]
 
-[Problemas que esto resuelve y para quién]
+- docfile: [PRPs/ai_docs/file.md]
+  why: [docs that the user has pasted in to the project]
 
-Qué
-[Comportamiento visible para el usuario y requisitos técnicos]
+```
 
-Criterios de Éxito
-[ ] [Resultados específicos y medibles]
+### Current Codebase tree (run `tree` in the root of the project) to get an overview of the codebase
+```bash
 
-Todo el Contexto Necesario
-Documentación y Referencias (liste todo el contexto necesario para implementar la funcionalidad)
-# LECTURA OBLIGATORIA - Incluya esto en su ventana de contexto
-- url: https://api.www.documentcloud.org/api
-  por_que: [Secciones/métodos específicos que necesitará]
+```
 
-- file: [ruta/a/ejemplo.py]
-  por_que: [Patrón a seguir, problemas a evitar]
+### Desired Codebase tree with files to be added and responsibility of file
+```bash
 
-- doc: https://www.sigmaaldrich.com/docs
-  seccion: [Sección específica sobre errores comunes]
-  critico: [Idea clave que previene errores comunes]
+```
 
-- docfile: [PRPs/ai_docs/archivo.md]
-  por_que: [documentos que el usuario ha pegado en el proyecto]
+### Known Gotchas of our codebase & Library Quirks
+```python
+# CRITICAL: [Library name] requires [specific setup]
+# Example: FastAPI requires async functions for endpoints
+# Example: This ORM doesn't support batch inserts over 1000 records
+# Example: We use pydantic v2 and  
+```
 
-Árbol actual de la base de código (ejecute tree en la raíz del proyecto) para obtener una visión general
+## Implementation Blueprint
 
+### Data models and structure
 
-Árbol deseado de la base de código con los archivos a añadir y la responsabilidad de cada uno
+Create the core data models, we ensure type safety and consistency.
+```python
+Examples: 
+ - orm models
+ - pydantic models
+ - pydantic schemas
+ - pydantic validators
 
+```
 
-Problemas Conocidos de nuestra base de código y Particularidades de las Librerías
-# CRÍTICO: La librería [nombre] requiere [configuración específica]
-# Ejemplo: FastAPI requiere funciones asíncronas para los endpoints
-# Ejemplo: Este ORM no soporta inserciones por lotes de más de 1000 registros
-# Ejemplo: Usamos pydantic v2 y
+### list of tasks to be completed to fullfill the PRP in the order they should be completed
 
-Plan de Implementación
-Modelos y estructura de datos
-Crear los modelos de datos principales; aseguramos la seguridad de tipos (type safety) y la consistencia.
+```yaml
+Task 1:
+MODIFY src/existing_module.py:
+  - FIND pattern: "class OldImplementation"
+  - INJECT after line containing "def __init__"
+  - PRESERVE existing method signatures
 
-Ejemplos:
- - modelos ORM
- - modelos pydantic
- - esquemas pydantic
- - validadores pydantic
-
-Lista de tareas a completar para cumplir el PRP en el orden en que deben realizarse
-Tarea 1:
-MODIFICAR src/modulo_existente.py:
-  - BUSCAR patrón: "class ImplementacionAntigua"
-  - INYECTAR después de la línea que contiene "def __init__"
-  - CONSERVAR las firmas de los métodos existentes
-
-CREAR src/nueva_funcionalidad.py:
-  - REPLICAR patrón de: src/funcionalidad_similar.py
-  - MODIFICAR el nombre de la clase y la lógica principal
-  - MANTENER idéntico el patrón de manejo de errores
+CREATE src/new_feature.py:
+  - MIRROR pattern from: src/similar_feature.py
+  - MODIFY class name and core logic
+  - KEEP error handling pattern identical
 
 ...(...)
 
-Tarea N:
+Task N:
 ...
 
-Pseudocódigo por tarea según sea necesario añadido a cada tarea
+```
 
-# Tarea 1
-# Pseudocódigo con detalles CRÍTICOS, no escribir el código completo
-async def nueva_funcionalidad(param: str) -> Result:
-    # PATRÓN: Siempre valide la entrada primero (ver src/validators.py)
-    validated = validate_input(param)  # lanza ValidationError
 
-    # OJO: Esta librería requiere un pool de conexiones (connection pooling)
-    async with get_connection() as conn:  # ver src/db/pool.py
-        # PATRÓN: Use el decorador de reintentos existente
+### Per task pseudocode as needed added to each task
+```python
+
+# Task 1
+# Pseudocode with CRITICAL details dont write entire code
+async def new_feature(param: str) -> Result:
+    # PATTERN: Always validate input first (see src/validators.py)
+    validated = validate_input(param)  # raises ValidationError
+    
+    # GOTCHA: This library requires connection pooling
+    async with get_connection() as conn:  # see src/db/pool.py
+        # PATTERN: Use existing retry decorator
         @retry(attempts=3, backoff=exponential)
         async def _inner():
-            # CRÍTICO: La API devuelve 429 si hay >10 req/seg
+            # CRITICAL: API returns 429 if >10 req/sec
             await rate_limiter.acquire()
             return await external_api.call(validated)
-
+        
         result = await _inner()
+    
+    # PATTERN: Standardized response format
+    return format_response(result)  # see src/utils/responses.py
+```
 
-    # PATRÓN: Formato de respuesta estandarizado
-    return format_response(result)  # ver src/utils/responses.py
-
-Puntos de Integración
-BASE_DE_DATOS:
-  - migracion: "Añadir columna 'feature_enabled' a la tabla de usuarios"
-  - indice: "CREATE INDEX idx_feature_lookup ON users(feature_id)"
-
+### Integration Points
+```yaml
+DATABASE:
+  - migration: "Add column 'feature_enabled' to users table"
+  - index: "CREATE INDEX idx_feature_lookup ON users(feature_id)"
+  
 CONFIG:
-  - añadir a: config/settings.py
-  - patron: "FEATURE_TIMEOUT = int(os.getenv('FEATURE_TIMEOUT', '30'))"
+  - add to: config/settings.py
+  - pattern: "FEATURE_TIMEOUT = int(os.getenv('FEATURE_TIMEOUT', '30'))"
+  
+ROUTES:
+  - add to: src/api/routes.py  
+  - pattern: "router.include_router(feature_router, prefix='/feature')"
+```
 
-RUTAS:
-  - añadir a: src/api/routes.py
-  - patron: "router.include_router(feature_router, prefix='/feature')"
+## Validation Loop
 
-Bucle de Validación
-Nivel 1: Sintaxis y Estilo
-# Ejecute esto PRIMERO - corrija cualquier error antes de proceder
-ruff check src/nueva_funcionalidad.py --fix  # Corregir automáticamente lo que sea posible
-mypy src/nueva_funcionalidad.py             # Verificación de tipos
+### Level 1: Syntax & Style
+```bash
+# Run these FIRST - fix any errors before proceeding
+ruff check src/new_feature.py --fix  # Auto-fix what's possible
+mypy src/new_feature.py              # Type checking
 
-# Esperado: Sin errores. Si hay errores, LEA el error y corríjalo.
+# Expected: No errors. If errors, READ the error and fix.
+```
 
-Nivel 2: Pruebas Unitarias para cada nueva funcionalidad/archivo/función usando los patrones existentes
-# CREAR test_nueva_funcionalidad.py con estos casos de prueba:
-def test_camino_feliz():
-    """La funcionalidad básica funciona"""
-    result = nueva_funcionalidad("entrada_valida")
+### Level 2: Unit Tests each new feature/file/function use existing test patterns
+```python
+# CREATE test_new_feature.py with these test cases:
+def test_happy_path():
+    """Basic functionality works"""
+    result = new_feature("valid_input")
     assert result.status == "success"
 
-def test_error_de_validacion():
-    """Una entrada inválida lanza ValidationError"""
+def test_validation_error():
+    """Invalid input raises ValidationError"""
     with pytest.raises(ValidationError):
-        nueva_funcionalidad("")
+        new_feature("")
 
-def test_timeout_api_externa():
-    """Maneja los tiempos de espera (timeouts) correctamente"""
+def test_external_api_timeout():
+    """Handles timeouts gracefully"""
     with mock.patch('external_api.call', side_effect=TimeoutError):
-        result = nueva_funcionalidad("valido")
+        result = new_feature("valid")
         assert result.status == "error"
         assert "timeout" in result.message
-```bash
-# Ejecutar e iterar hasta que pasen:
-uv run pytest test_nueva_funcionalidad.py -v
-# Si falla: Lea el error, entienda la causa raíz, corrija el código y vuelva a ejecutar (nunca haga un mock para que la prueba pase).
+```
 
-Nivel 3: Pruebas de Integración
-# Iniciar el servicio
+```bash
+# Run and iterate until passing:
+uv run pytest test_new_feature.py -v
+# If failing: Read error, understand root cause, fix code, re-run (never mock to pass)
+```
+
+### Level 3: Integration Test
+```bash
+# Start the service
 uv run python -m src.main --dev
 
-# Probar el endpoint
+# Test the endpoint
 curl -X POST http://localhost:8000/feature \
   -H "Content-Type: application/json" \
-  -d '{"param": "valor_de_prueba"}'
+  -d '{"param": "test_value"}'
 
-# Esperado: {"status": "success", "data": {...}}
-# Si hay error: Revise los logs en logs/app.log para ver el stack trace.
+# Expected: {"status": "success", "data": {...}}
+# If error: Check logs at logs/app.log for stack trace
+```
 
-Lista de Verificación Final
-[ ] Todas las pruebas pasan: uv run pytest tests/ -v
+## Final validation Checklist
+- [ ] All tests pass: `uv run pytest tests/ -v`
+- [ ] No linting errors: `uv run ruff check src/`
+- [ ] No type errors: `uv run mypy src/`
+- [ ] Manual test successful: [specific curl/command]
+- [ ] Error cases handled gracefully
+- [ ] Logs are informative but not verbose
+- [ ] Documentation updated if needed
 
-[ ] Sin errores de linting: uv run ruff check src/
+---
 
-[ ] Sin errores de tipo: uv run mypy src/
-
-[ ] Prueba manual exitosa: [curl/comando específico]
-
-[ ] Casos de error manejados correctamente
-
-[ ] Los logs son informativos pero no verbosos
-
-[ ] Documentación actualizada si es necesario
-
-Antipatrones a Evitar
-❌ No cree nuevos patrones cuando los existentes funcionan.
-
-❌ No omita la validación porque "debería funcionar".
-
-❌ No ignore las pruebas que fallan; corríjalas.
-
-❌ No use funciones síncronas en un contexto asíncrono.
-
-❌ No inserte valores fijos en el código que deberían estar en la configuración.
-
-❌ No capture todas las excepciones; sea específico.
+## Anti-Patterns to Avoid
+- ❌ Don't create new patterns when existing ones work
+- ❌ Don't skip validation because "it should work"  
+- ❌ Don't ignore failing tests - fix them
+- ❌ Don't use sync functions in async context
+- ❌ Don't hardcode values that should be config
+- ❌ Don't catch all exceptions - be specific
